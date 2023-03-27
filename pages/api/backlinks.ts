@@ -1,11 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { google } from 'googleapis'
 import { getYoutubeResults } from '@/lib/yt'
-
-const youtube = google.youtube({
-  version: 'v3',
-  auth: process.env.YT_API // Replace with your own API key
-})
 
 export default async function handler (
   req: NextApiRequest,
