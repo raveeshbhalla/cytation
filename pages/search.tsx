@@ -59,7 +59,7 @@ const SRP = ({ props }: SRPProps) => {
               <Spacer y={2} />
               <Text h3>Other Cytations</Text>
               {videos.slice(1).map(video => (
-                <Row>
+                <Row key={video.id.videoId}>
                   <a
                     href={getYouTubeUrl(video)}
                     target='_blank'
