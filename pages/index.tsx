@@ -1,12 +1,16 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
-import { useState } from 'react'
-import { Input, Button, Container, Row, Col, Grid } from '@nextui-org/react'
+import { useEffect, useRef, useState } from 'react'
+import { Input, Button, Container, Row, Text, Spacer } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 
 const inter = Inter({ subsets: ['latin'] })
 
 const IndexPage = () => {
+  const inputRef = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
   const router = useRouter()
   const [url, setUrl] = useState('')
 
@@ -37,15 +41,28 @@ const IndexPage = () => {
                 handleSearch()
               }}
             >
+              <Text
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                color='secondary'
+              >
+                Find YouTube videos that cite an arXiv paper
+              </Text>
+              <Spacer y={0.5} />
               <Row justify='center' align='center'>
                 <Input
                   fullWidth
                   clearable
-                  placeholder='Find YouTube videos that cite an arXiv paper'
+                  placeholder='Enter arXiv URL'
                   value={url}
+                  ref={inputRef}
                   onChange={e => setUrl(e.target.value)}
                 />
               </Row>
+              <Spacer y={0.5} />
               <Row justify='center' align='center'>
                 <Button type='submit' onClick={handleSearch}>
                   Search
