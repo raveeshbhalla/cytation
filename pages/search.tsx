@@ -1,12 +1,13 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import { useState } from 'react'
-import axios from 'axios'
 import { Input, Button, Text, Spacer, Row, Grid, Container } from '@nextui-org/react'
 import Result from '../components/result'
 import { getYoutubeResults, getYouTubeUrl } from '../lib/yt'
 import { useRouter } from 'next/router'
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { GetServerSideProps } from 'next'
+import ReactGA from 'react-ga'
+import { logEvent } from '@/lib/analytics'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +22,7 @@ const SRP = ({ props }: SRPProps) => {
   const [url, setUrl] = useState(props.query);
   const { videos, error, query } = props;
   const handleSearch = async () => {
+    logEvent('Search', 'submit', url);
     router.push(`/search?url=${encodeURIComponent(url)}`);
   };
 
@@ -60,16 +62,16 @@ const SRP = ({ props }: SRPProps) => {
               <Text h3>Other Cytations</Text>
               {videos.slice(1).map(video => (
                 <Row key={video.id.videoId}>
-                  <a
-                    href={getYouTubeUrl(video)}
-                    target='_blank'
-                    rel='noreferrer'
+                  <ReactGA.OutboundLink
+                  eventLabel="ytResult"
+                  to={getYouTubeUrl(video)}
+                  target="_blank"
                   >
                     <Text
                       color='#8ab4f8'
                       dangerouslySetInnerHTML={{ __html: video.snippet.title }}
                     />
-                  </a>
+                  </ReactGA.OutboundLink>
                 </Row>
               ))}
             </div>

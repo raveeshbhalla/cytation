@@ -8,6 +8,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Router from 'next/router'
 import { useEffect } from 'react'
+import { initGA, logPageView } from '../lib/analytics'
 
 // 2. Call `createTheme` and pass your custom values
 const lightTheme = createTheme({
@@ -45,6 +46,8 @@ function Footer () {
 }
 export default function App ({ Component, pageProps }: AppProps) {
   useEffect(() => {
+    initGA();
+    logPageView();
     Router.events.on('routeChangeStart', NProgress.start)
     Router.events.on('routeChangeComplete', NProgress.done)
     Router.events.on('routeChangeError', NProgress.done)
@@ -53,7 +56,9 @@ export default function App ({ Component, pageProps }: AppProps) {
       Router.events.off('routeChangeComplete', NProgress.done)
       Router.events.off('routeChangeError', NProgress.done)
     }
-  }, [])
+  }, []);
+
+  
   return (
     <NextThemesProvider
       defaultTheme='system'
