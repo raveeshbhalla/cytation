@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
 import ReactGA from 'react-ga'
 import * as gtag from '../lib/analytics'
+import Shortcut from '@/components/shortcut'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -37,6 +38,14 @@ const SRP = ({ props }: SRPProps) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={inter.className}>
+      <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            height: '100vh'
+          }}
+        >
       <Container xs alignContent='center'>
         <div>
           <form onSubmit={e => {
@@ -81,6 +90,10 @@ const SRP = ({ props }: SRPProps) => {
           ) : null}
         </div>
         </Container>
+
+        <Spacer y={2} />
+        <Shortcut />
+        </div>
       </main>
     </div>
   )

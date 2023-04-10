@@ -4,12 +4,12 @@ import type { AppProps } from 'next/app'
 import { Analytics } from '@vercel/analytics/react'
 import { createTheme, NextUIProvider } from '@nextui-org/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
-import { Text } from '@nextui-org/react'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Router from 'next/router'
 import { useEffect } from 'react'
 import * as gtag from '../lib/analytics'
+import Footer from '../components/footer'
 
 // 2. Call `createTheme` and pass your custom values
 const lightTheme = createTheme({
@@ -26,32 +26,9 @@ const darkTheme = createTheme({
   }
 })
 
-function Footer () {
-  return (
-    <footer>
-      <Text
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        <a target='_blank' href='https://twitter.com/raveeshbhalla'>
-          {' '}
-          Built by @raveeshbhalla
-        </a>
-        <span style={{ marginLeft: '0.5rem', marginRight: '0.5rem' }}> | </span>
-        <a target='_blank' href='https://cytation.substack.com/'>
-          Subscribe for updates
-        </a>
-      </Text>
-    </footer>
-  )
-}
-
 export default function App ({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    const handleRouteChange = url => {
+    const handleRouteChange = (url: string) => {
       gtag.pageview(url)
     }
     Router.events.on('routeChangeStart', NProgress.start)

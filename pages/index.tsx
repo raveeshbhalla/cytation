@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Input, Button, Container, Row, Text, Spacer } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import * as gtag from '../lib/analytics'
+import Shortcut from '@/components/shortcut'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +22,7 @@ const IndexPage = () => {
       category: 'submit',
       label: url,
     });
+
     router.push(`/search?url=${encodeURIComponent(url)}`);
   }
 
@@ -76,6 +78,8 @@ const IndexPage = () => {
               </Row>
             </form>
           </Container>
+          <Spacer y={2} />
+          <Shortcut />
         </div>
       </main>
     </div>
