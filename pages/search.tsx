@@ -66,16 +66,15 @@ const SRP = ({ props }: SRPProps) => {
               <Text h3>Other Cytations</Text>
               {videos.slice(1).map(video => (
                 <Row key={video.id.videoId}>
-                  <ReactGA.OutboundLink
-                  eventLabel="ytResult"
-                  to={getYouTubeUrl(video)}
+                  <a
+                  href={getYouTubeUrl(video)}
                   target="_blank"
                   >
                     <Text
                       color='#8ab4f8'
                       dangerouslySetInnerHTML={{ __html: video.snippet.title }}
                     />
-                  </ReactGA.OutboundLink>
+                  </a>
                 </Row>
               ))}
             </div>

@@ -1,6 +1,5 @@
 import { Grid, Text } from "@nextui-org/react";
 import { getYoutubeEmbed } from "../lib/yt";
-import ReactGA from 'react-ga';
 import { getYouTubeUrl } from "../lib/yt";
 
 export default function Result({ video }) {
@@ -23,9 +22,8 @@ export default function Result({ video }) {
         </div>
         </Grid>
         <Grid xs={12} sm={6} md={6} lg={6}>
-        <ReactGA.OutboundLink
-          eventLabel="ytTopResult"
-          to={getYouTubeUrl(video)}
+        <a
+          href={getYouTubeUrl(video)}
           target="_blank"
           >
           <Text
@@ -33,7 +31,7 @@ export default function Result({ video }) {
             size={15}
             dangerouslySetInnerHTML={{ __html: video.snippet.title }}
           />
-          </ReactGA.OutboundLink>
+          </a>
         </Grid>
       </Grid.Container>
     );
