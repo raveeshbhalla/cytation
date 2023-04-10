@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import { useEffect, useRef, useState } from 'react'
 import { Input, Button, Container, Row, Text, Spacer } from '@nextui-org/react'
 import { useRouter } from 'next/router'
-import { logEvent } from '@/lib/analytics'
+import * as gtag from '../lib/analytics'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +16,11 @@ const IndexPage = () => {
   const [url, setUrl] = useState('')
 
   const handleSearch = async () => {
-    logEvent('Search', 'submit', url);
+    gtag.event({
+      action: 'search',
+      category: 'submit',
+      label: url,
+    });
     router.push(`/search?url=${encodeURIComponent(url)}`);
   }
 

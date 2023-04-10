@@ -7,7 +7,7 @@ import { getYoutubeResults, getYouTubeUrl } from '../lib/yt'
 import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
 import ReactGA from 'react-ga'
-import { logEvent } from '@/lib/analytics'
+import * as gtag from '../lib/analytics'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,7 +22,11 @@ const SRP = ({ props }: SRPProps) => {
   const [url, setUrl] = useState(props.query);
   const { videos, error, query } = props;
   const handleSearch = async () => {
-    logEvent('Search', 'submit', url);
+    gtag.event({
+      action: 'search',
+      category: 'submit',
+      label: url,
+    });
     router.push(`/search?url=${encodeURIComponent(url)}`);
   };
 

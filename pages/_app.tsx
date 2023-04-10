@@ -1,3 +1,4 @@
+import Script from 'next/script'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Analytics } from '@vercel/analytics/react'
@@ -8,7 +9,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Router from 'next/router'
 import { useEffect } from 'react'
-import { initGA, logPageView } from '../lib/analytics'
+import * as gtag from '../lib/analytics'
 
 // 2. Call `createTheme` and pass your custom values
 const lightTheme = createTheme({
@@ -20,7 +21,7 @@ const darkTheme = createTheme({
   type: 'dark',
   theme: {
     colors: {
-      secondary: '#697177',
+      secondary: '#697177'
     }
   }
 })
@@ -35,19 +36,24 @@ function Footer () {
           justifyContent: 'center'
         }}
       >
-       <a target='_blank' href='https://twitter.com/raveeshbhalla'>{' '}
-        Built by @raveeshbhalla
+        <a target='_blank' href='https://twitter.com/raveeshbhalla'>
+          {' '}
+          Built by @raveeshbhalla
         </a>
-        <span style={{ marginLeft: '0.5rem', marginRight: '0.5rem' }}>{' '}|{' '}</span>
-        <a target='_blank' href='https://cytation.substack.com/'>Subscribe for updates</a>
+        <span style={{ marginLeft: '0.5rem', marginRight: '0.5rem' }}> | </span>
+        <a target='_blank' href='https://cytation.substack.com/'>
+          Subscribe for updates
+        </a>
       </Text>
     </footer>
   )
 }
+
 export default function App ({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    initGA();
-    logPageView();
+    const handleRouteChange = url => {
+      gtag.pageview(url)
+    }
     Router.events.on('routeChangeStart', NProgress.start)
     Router.events.on('routeChangeComplete', NProgress.done)
     Router.events.on('routeChangeError', NProgress.done)
@@ -56,23 +62,29 @@ export default function App ({ Component, pageProps }: AppProps) {
       Router.events.off('routeChangeComplete', NProgress.done)
       Router.events.off('routeChangeError', NProgress.done)
     }
-  }, []);
+  }, [])
 
-  
   return (
-    <NextThemesProvider
-      defaultTheme='system'
-      attribute='class'
-      value={{
-        light: lightTheme.className,
-        dark: darkTheme.className
-      }}
-    >
-      <NextUIProvider>
-        <Component props={pageProps} />
-        <Analytics />
-        <Footer />
-      </NextUIProvider>
-    </NextThemesProvider>
+    <>
+      <Script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id={process.env.NEXT_PUBLIC_GA_ID`}
+      />
+      <Script dangerouslySetInnerHTML={{__html: gtag.headScript}}/>
+      <NextThemesProvider
+        defaultTheme='system'
+        attribute='class'
+        value={{
+          light: lightTheme.className,
+          dark: darkTheme.className
+        }}
+      >
+        <NextUIProvider>
+          <Component props={pageProps} />
+          <Analytics />
+          <Footer />
+        </NextUIProvider>
+      </NextThemesProvider>
+    </>
   )
 }
