@@ -10,7 +10,7 @@ export default async function handler (
     return
   } else {
     const { url } = req.query;
-    const videos = getYoutubeResults(url);
+    const videos = await getYoutubeResults(url);
     res.status(200).json({ videos })
   }
 }

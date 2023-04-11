@@ -3,8 +3,8 @@ import { Inter } from 'next/font/google'
 import { useEffect, useRef, useState } from 'react'
 import { Input, Button, Container, Row, Text, Spacer } from '@nextui-org/react'
 import { useRouter } from 'next/router'
-import * as gtag from '../lib/analytics'
 import Shortcut from '@/components/shortcut'
+import handleSearch from '@/lib/handle_search'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,16 +15,6 @@ const IndexPage = () => {
   }, [])
   const router = useRouter()
   const [url, setUrl] = useState('')
-
-  const handleSearch = async () => {
-    gtag.event({
-      action: 'search',
-      category: 'submit',
-      label: url,
-    });
-
-    router.push(`/search?url=${encodeURIComponent(url)}`);
-  }
 
   return (
     <div>
@@ -46,7 +36,7 @@ const IndexPage = () => {
             <form
               onSubmit={e => {
                 e.preventDefault()
-                handleSearch()
+                handleSearch(router, url);
               }}
             >
               <Text
@@ -72,7 +62,7 @@ const IndexPage = () => {
               </Row>
               <Spacer y={0.5} />
               <Row justify='center' align='center'>
-                <Button type='submit' onClick={handleSearch}>
+                <Button type='submit'>
                   Search
                 </Button>
               </Row>
