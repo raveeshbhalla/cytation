@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
 import Shortcut from '@/components/shortcut'
 import handleSearch from '@/lib/handle_search'
-import { Video } from '@/public/types/backlinks'
+import { Video } from '@/types/backlinks'
 
 const inter = Inter({ subsets: ['latin'] })
 
