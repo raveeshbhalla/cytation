@@ -1,13 +1,7 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import { useState } from 'react'
-import {
-  Input,
-  Text,
-  Spacer,
-  Row,
-  Container
-} from '@nextui-org/react'
+import { Input, Text, Spacer, Row, Container } from '@nextui-org/react'
 import Result from '../components/result'
 import { getYoutubeResults, getYouTubeUrl } from '../lib/yt'
 import { useRouter } from 'next/router'
@@ -26,10 +20,10 @@ type SRPProps = {
   }
 }
 
-const SRP:React.FC<SRPProps> = ({ props }) => {
-  const router = useRouter();
-  const [url, setUrl] = useState(props.query);
-  const { videos, error } = props;
+const SRP: React.FC<SRPProps> = ({ props }) => {
+  const router = useRouter()
+  const [url, setUrl] = useState(props.query)
+  const { videos, error } = props
 
   return (
     <div>
@@ -105,16 +99,21 @@ export default SRP
 export const getServerSideProps: GetServerSideProps = async context => {
   const { query } = context
   const { url } = query
-  const videos = await getYoutubeResults(url)
-  let error = ''
-  if (!videos) {
-    error = 'Error fetching videos'
-  } else if (videos.length === 0) {
-    error = 'No videos found'
+  const backlinks = await getYoutubeResults(url as string)
+  let error = backlinks.error ? backlinks.error : ''
+  let videos: Video[] = []
+  if (!backlinks.error) {
+    if (!backlinks || !backlinks.data) {
+      error = 'Error fetching videos'
+    } else if (backlinks.data.items.length === 0) {
+      error = 'No videos found'
+    } else {
+      videos = backlinks.data.items
+    }
   }
   return {
     props: {
-      videos,
+      videos: videos,
       query: url as string,
       error
     }
