@@ -10,9 +10,13 @@ export const getYoutubeEmbed = (video: Video) => {
 }
 
 export const getYoutubeResults = async (url: string): Promise<Backlinks> => {
-  const apiKey = process.env.YT_API 
- let {data, error}: Backlinks = {}
+  const apiKey = process.env.YT_API
+  let { data, error }: Backlinks = {}
+
   try {
+    if (isShortenedUrl(url)) {
+      url = await findRedirectUrl(url)
+    }
     const matchResult = url
       .toString()
       .match(/arxiv\.org\/(?:pdf|abs)\/(\d+\.\d+)(?:\.pdf)?(?:\?.*)?$/)
@@ -27,9 +31,31 @@ export const getYoutubeResults = async (url: string): Promise<Backlinks> => {
     if (e instanceof TypeError) {
       error = 'Invalid arXiv URL'
     } else {
-        error = (e as Error).message;
+      error = (e as Error).message
     }
   } finally {
     return { data, error }
   }
+}
+
+const isShortenedUrl = (url: string): boolean => {
+  const shorteners = [
+    'bit.ly',
+    'tinyurl.com',
+    'rebrand.ly',
+    't.co',
+    'goo.gl',
+    'ow.ly',
+    'buff.ly',
+    'tiny.cc',
+    'is.gd'
+  ]
+
+  const urlHostname = new URL(url).hostname
+  return shorteners.some(shortener => urlHostname === shortener)
+}
+
+const findRedirectUrl = async (url: string): Promise<string> => {
+  const response = await axios.head(url, { maxRedirects: 10 }) // Follow up to 10 redirects
+  return response.request.res.responseUrl
 }
