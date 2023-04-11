@@ -34,5 +34,16 @@ export type Video = {
 }
 
 export type Backlinks = {
-    videos: Video[];
+    data?: {
+        kind: string;
+        etag: string;
+        nextPageToken: string;
+        regionCode: string;
+        pageInfo: {
+            totalResults: number;
+            resultsPerPage: number;
+        },
+        items: Video[];
+    }
+    error?: string;
 };

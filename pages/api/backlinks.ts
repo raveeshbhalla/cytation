@@ -10,7 +10,12 @@ export default async function handler (
     return
   } else {
     const { url } = req.query;
-    const videos = await getYoutubeResults(url);
-    res.status(200).json({ videos })
+    try {
+      const data = await getYoutubeResults(url as string);
+      res.status(200).json({ data })
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message })
+      return;
+    }
   }
 }
